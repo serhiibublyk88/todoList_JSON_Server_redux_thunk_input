@@ -1,3 +1,4 @@
+
 export const ADD_TODO = "ADD_TODO";
 export const UPDATE_TODO = "UPDATE_TODO";
 export const DELETE_TODO = "DELETE_TODO";
@@ -5,15 +6,18 @@ export const SET_TODOS = "SET_TODOS";
 export const SET_CURRENT_INDEX = "SET_CURRENT_INDEX";
 export const FETCH_NEXT_TODO_SUCCESS = "FETCH_NEXT_TODO_SUCCESS";
 
-export const addTodo = (todo) => async (dispatch) => {
+export const addTodo = (title) => async (dispatch) => {
   try {
     const response = await fetch("http://localhost:3000/todo", {
       method: "POST",
       headers: {
         "Content-Type": "application/json;charset=utf-8",
       },
-      body: JSON.stringify(todo),
+      body: JSON.stringify({ title, completed: false }),
     });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
     const data = await response.json();
     dispatch({ type: ADD_TODO, payload: data });
   } catch (error) {

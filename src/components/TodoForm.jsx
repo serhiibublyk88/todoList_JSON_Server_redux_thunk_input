@@ -5,15 +5,20 @@ import {
   toggleSort,
   setLoadingMessage,
 } from "../actions/uiActions";
+import {
+  selectSearchTerm,
+  selectIsSorted,
+  selectIsProcessing,
+} from "../selectors/uiSelectors";
 import styles from "../App.module.css";
 
 const TodoForm = () => {
   const dispatch = useDispatch();
-  const { searchTerm, isSorted, isProcessing } = useSelector(
-    (state) => state.ui
-  );
+  const searchTerm = useSelector(selectSearchTerm);
+  const isProcessing = useSelector(selectIsProcessing);
+  const isSorted = useSelector(selectIsSorted);
 
-  const handleInputChange = (event) => {
+  const handleSearch = (event) => {
     dispatch(setSearchTerm(event.target.value));
   };
 
@@ -24,18 +29,13 @@ const TodoForm = () => {
     }
 
     if (searchTerm.trim() === "") {
-      console.warn("Please enter a todo title.");
+      console.warn("Please enter a todo.");
       return;
     }
 
-    const newTodo = {
-      title: searchTerm,
-      completed: false, 
-    };
-
     dispatch(setLoadingMessage("Adding todo..."));
-    dispatch(addTodo(newTodo));
-    dispatch(setSearchTerm("")); 
+    dispatch(addTodo(searchTerm.trim()));
+    dispatch(setSearchTerm(""));
   };
 
   const handleToggleSort = () => {
@@ -51,7 +51,7 @@ const TodoForm = () => {
         type="text"
         placeholder="Add/Search..."
         value={searchTerm}
-        onChange={handleInputChange}
+        onChange={handleSearch}
       />
       <button onClick={handleToggleSort} disabled={isProcessing}>
         {isSorted ? "Unsort" : "Sort A-Z"}
