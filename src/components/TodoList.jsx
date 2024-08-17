@@ -1,16 +1,15 @@
-
 import { useSelector } from "react-redux";
 import TodoItem from "./TodoItem";
+import { selectTodos, selectSearchTerm, selectIsSorted } from "../selectors";
 import styles from "../App.module.css";
 
 const TodoList = () => {
-  const todos = useSelector((state) => state.todos.todos || []); // Защита от неопределенности
-  const { searchTerm = "", isSorted } = useSelector((state) => state.ui || {}); // Защита от неопределенности
+  const todos = useSelector(selectTodos);
+  const searchTerm = useSelector(selectSearchTerm);
+  const isSorted = useSelector(selectIsSorted);
 
   const filteredTodos = todos.filter((todo) =>
-    todo.title
-      ? todo.title.toLowerCase().includes(searchTerm.toLowerCase())
-      : false
+    todo.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (isSorted) {

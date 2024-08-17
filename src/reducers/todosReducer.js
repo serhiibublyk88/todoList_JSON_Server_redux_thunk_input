@@ -1,16 +1,13 @@
-
 import {
   ADD_TODO,
   UPDATE_TODO,
   DELETE_TODO,
   SET_TODOS,
-  SET_CURRENT_INDEX,
   FETCH_NEXT_TODO_SUCCESS,
 } from "../actions/todoActions";
 
 const initialState = {
   todos: [],
-  currentIndex: 0,
 };
 
 const todosReducer = (state = initialState, action) => {
@@ -37,16 +34,10 @@ const todosReducer = (state = initialState, action) => {
         ...state,
         todos: action.payload,
       };
-    case SET_CURRENT_INDEX:
-      return {
-        ...state,
-        currentIndex: action.payload,
-      };
     case FETCH_NEXT_TODO_SUCCESS:
       return {
         ...state,
         todos: [...state.todos, action.payload],
-        currentIndex: state.currentIndex + 1,
       };
     default:
       return state;
